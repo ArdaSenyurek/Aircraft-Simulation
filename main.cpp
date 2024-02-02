@@ -14,6 +14,13 @@ int main()
 	std::cout << "-----" << std::endl;
 	tensor<float> transposed_debug = ~debug;
 	transposed_debug.print();
-	std::cout << "-----" << std::endl;
+	std::cout << "*****" << std::endl;
+
+	tensor<float> a = transposed_debug[1];
+	a.print();
+
+	std::cout << "/////" << std::endl;
+	debug[1].print();
+
   	return 0;
  }

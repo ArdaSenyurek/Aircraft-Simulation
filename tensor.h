@@ -9,52 +9,46 @@ template <class ElType>
 class tensor
 {
 	public:
-		tensor(uint row, uint col, ElType* start)
+
+
+		tensor(uint size, ElType* dataPtr)
 		:
-			row_(row),
-			col_(col),
-			startPtr_(start),
-			endPtr_(start + col)
+			startPtr_(dataPtr),
+			size_(size)
 		{
-			uint size = row_ * col_;
-			ElType** trs = (ElType**)malloc(size * sizeof(ElType*));
-			if (trs == NULL) throw "tensor malloc error";
-			else
-			{
-				mixedPtr_ = trs;
-				for(uint mix_iter = 0; mix_iter < size; mix_iter++)
-				{
-					mixedPtr_[mix_iter] = startPtr_ + mix_iter;
-				}
-			}	
+			endPtr_ = startPtr_ + size_;
+			ElType** trs = (ElType**)malloc(size_ * sizeof(ElType*));
+			if 	(trs == NULL) throw "tensor malloc error";
+			else 	mixedPtr_ = trs;
 		}
+
 		// Use this when have no tensor at hand
 		tensor(uint row, uint col)
 		:
 			row_(row),
-			col_(col)
+			col_(col),
+			size_(row_ * col_)
 		{
-			uint size = row_ * col_;
 		
-			ElType* els = (ElType*)malloc(size * sizeof(ElType));
+			ElType* els = (ElType*)malloc(size_ * sizeof(ElType));
 			if (els == NULL) throw "tensor malloc error";
 			else
 			{
 				startPtr_ = els;
 			}	
-			endPtr_ = startPtr_ + size;
+			endPtr_ = startPtr_ + size_;
 
 
-			ElType** trs = (ElType**)malloc(size * sizeof(ElType*));
+			ElType** trs = (ElType**)malloc(size_ * sizeof(ElType*));
 			if (trs == NULL) throw "tensor malloc error";
 			else
 			{
 				mixedPtr_ = trs;
-				for(uint mix_iter = 0; mix_iter < size; mix_iter++)
+				
+				for(uint mix_iter = 0; mix_iter < size_; mix_iter++)
 				{
 					mixedPtr_[mix_iter] = startPtr_ + mix_iter;
 				}
-				
 
 			}	
 		}
@@ -66,19 +60,29 @@ class tensor
 
 		tensor operator[](uint desiredRow) const
 		{
-			ElType** customStart = mixedPtr_ + (col_* (desiredRow - 1));
-			tensor<ElType> res = tensor(1, col_, *customStart);
+			ElType** rowStart = mixedPtr_ + (col_* (desiredRow));
+			tensor<ElType> res = tensor(col_, startPtr_);
+			res.col_ = this -> col_;
+			res.row_ = 1;
+			for(uint iter = 0; iter < col_; iter++)
+			{
+				res.mixedPtr_[iter] = *(rowStart + iter);
+			}	
+
 			return res;
 		}
 	
 		// Transpose
 		tensor operator~()
 		{
-			tensor<ElType> res = tensor<ElType>(col_, row_, startPtr_);
+			tensor<ElType> res = tensor<ElType>(size_, startPtr_);
+			res.row_ = col_;
+			res.col_ = row_;
 			for(uint cter = 0; cter < row_ * col_; cter++)
 			{
-				 uint transposedIndex = mapPtrTranspose(startPtr_, startPtr_ + cter);
-				res.mixedPtr_[transposedIndex] = startPtr_ + cter;
+				ElType* tempPtr = startPtr_ + cter;
+				uint transposedIndex = mapPtrTranspose(startPtr_, tempPtr);
+				res.mixedPtr_[transposedIndex] = tempPtr;
 			}
 			return res;
 		}
@@ -88,10 +92,10 @@ class tensor
 			startPtr_[index] = value;
 		}
 		
-		void printLinear()
+		void printLinear() const
 		{
 			std::cout << "startPtr_ : ";
-			for(uint iter = 0; iter < row_ * col_; iter++)
+			for(uint iter = 0; iter < size_; iter++)
 			{
 			
 				std::cout << " " << startPtr_ + iter << " ";
@@ -99,35 +103,34 @@ class tensor
 			std::cout << "\n";
 
 			std::cout << "mixedPtr_: ";
-			for(uint iter = 0; iter < row_ * col_; iter++)
+			for(uint iter = 0; iter < size_; iter++)
 			{
 			
 				std::cout << " " << mixedPtr_[iter] << " ";
+
 			}
 			std::cout << "\n";
 
 		}
 
-
-
 		void print() const
 		{
-			
-			uint index = 0;
-			for(uint rowIter = 0; rowIter < row_; rowIter++)
+			uint ctr = 0;
+			ElType** iterPtr = mixedPtr_;
+			std::cout << "| ";
+			while(iterPtr != mixedPtr_ + size_)
 			{
-			
-				std::cout << "| "; 
-
-				for(uint colIter = 0; colIter < col_; colIter++)
+				std::cout << **iterPtr << " ";
+				iterPtr++;
+				ctr++;
+				if (ctr % col_ == 0)
 				{
-				
-					std::cout << " " << *mixedPtr_[index] << " ";
-					index++;
-						
-				}
-				std::cout << "|" << std::endl;
+					if(ctr == size_) std::cout << "|\n";
+					else 		 std::cout << "|\n| ";
+				}	 
+
 			}
+
 		}
 		void setInOrder()
 		{
@@ -148,7 +151,8 @@ class tensor
 		ElType* 	startPtr_;
 		ElType* 	endPtr_;
 		// This is for transpose
-		ElType**	mixedPtr_;	
+		ElType**	mixedPtr_;
+		uint		size_;	
 
 		uint mapPtrTranspose(ElType* start, ElType* normal) const
 		{
