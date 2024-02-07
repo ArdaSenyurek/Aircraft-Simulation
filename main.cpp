@@ -8,6 +8,7 @@
 
 int main()
 {
+	/*
 	tensor<float> debug(2,3);
 	debug.setInOrder();
 	debug.print();
@@ -21,6 +22,16 @@ int main()
 
 	std::cout << "/////" << std::endl;
 	debug[1].print();
+	*/
+	
+	tensor<float> debug_first(2,3);
+	debug_first.setInOrder();
 
+	tensor<float> debug_second(2,3);
+	debug_second.setInOrder();
+
+	debug_first + debug_second; 
+	
+	
   	return 0;
  }

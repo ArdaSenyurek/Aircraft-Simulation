@@ -52,12 +52,34 @@ class tensor
 
 			}	
 		}
+		tensor& operator=(tensor&& other)
+		{
 		
+			delete startPtr_;
+			delete endPtr_;
+			delete mixedPtr_;
+			
+			startPtr_ 	= other.startPtr_;
+			endPtr_   	= other.endPtr_;
+			mixedPtr_	= other.mixedPtr_;
+			row_		= other.row_;	
+			col_		= other.col_;
+			size_		= other.size_;	
+		}
+
+
+		~tensor()
+		{
+			delete startPtr_;
+			delete endPtr_;
+			delete mixedPtr_;
+		}
+
 		ElType* getPtr() const
 		{
 			return startPtr_;
 		}
-
+		
 		tensor operator[](uint desiredRow) const
 		{
 			ElType** rowStart = mixedPtr_ + (col_* (desiredRow));
@@ -86,6 +108,7 @@ class tensor
 			}
 			return res;
 		}
+
 		// TODO: make value to be of type ElType. For now I set it to be uint
 		void set(uint value, uint index)
 		{
@@ -144,6 +167,45 @@ class tensor
 				customPtr++;
 			}
 		}
+		// This creates a copy.
+		tensor operator+(const tensor& Tensor1)
+		{
+			tensor<ElType> res(row_, col_);
+			
+			for (uint iter = 0; iter < size_; iter++)
+			{
+				ElType srcFirst 	= startPtr_[iter];
+				ElType srcSecond 	= Tensor1.startPtr_[iter];
+				res.startPtr_[iter] = srcFirst + srcSecond;
+			}
+			res.print();
+			return res;
+
+
+
+			
+		}
+
+		tensor operator-(const tensor Tensor1)
+		{
+		
+			
+		}
+
+		tensor operator*(const tensor Tensor1)
+		{
+		
+			
+		}
+
+		tensor operator<<(const tensor Tensor1)
+		{
+		
+			
+		}
+
+
+		
 
 	private:
 		uint		row_;
