@@ -22,16 +22,16 @@ int main()
 
 	std::cout << "/////" << std::endl;
 	debug[1].print();
-	*/
 	
+	*/
 	tensor<float> debug_first(2,3);
 	debug_first.setInOrder();
+	debug_first.print();
 
-	tensor<float> debug_second(2,3);
+	tensor<float> debug_second(3,2);
 	debug_second.setInOrder();
-
-	debug_first + debug_second; 
-	
-	
+	debug_second.print();
+	debug_first * debug_second; 
+	 
   	return 0;
  }

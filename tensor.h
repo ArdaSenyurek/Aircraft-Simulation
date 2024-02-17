@@ -1,9 +1,10 @@
 #ifndef TENSOR_H
 #define TENSOR_H
-
+#include <stdexcept>
 #include <cstdlib>
 #include <iostream>
 #include "uint.h"
+
 
 template <class ElType>
 class tensor
@@ -52,68 +53,20 @@ class tensor
 
 			}	
 		}
-		tensor& operator=(tensor&& other)
-		{
-		
-			delete startPtr_;
-			delete endPtr_;
-			delete mixedPtr_;
-			
-			startPtr_ 	= other.startPtr_;
-			endPtr_   	= other.endPtr_;
-			mixedPtr_	= other.mixedPtr_;
-			row_		= other.row_;	
-			col_		= other.col_;
-			size_		= other.size_;	
-		}
-
 
 		~tensor()
 		{
-			delete startPtr_;
-			delete endPtr_;
-			delete mixedPtr_;
-		}
+			free(mixedPtr_);
+			free(startPtr_);
 
+		}
+//------------------
 		ElType* getPtr() const
 		{
 			return startPtr_;
 		}
 		
-		tensor operator[](uint desiredRow) const
-		{
-			ElType** rowStart = mixedPtr_ + (col_* (desiredRow));
-			tensor<ElType> res = tensor(col_, startPtr_);
-			res.col_ = this -> col_;
-			res.row_ = 1;
-			for(uint iter = 0; iter < col_; iter++)
-			{
-				res.mixedPtr_[iter] = *(rowStart + iter);
-			}	
 
-			return res;
-		}
-	
-		// Transpose
-		tensor operator~()
-		{
-			tensor<ElType> res = tensor<ElType>(size_, startPtr_);
-			res.row_ = col_;
-			res.col_ = row_;
-			for(uint cter = 0; cter < row_ * col_; cter++)
-			{
-				ElType* tempPtr = startPtr_ + cter;
-				uint transposedIndex = mapPtrTranspose(startPtr_, tempPtr);
-				res.mixedPtr_[transposedIndex] = tempPtr;
-			}
-			return res;
-		}
-
-		// TODO: make value to be of type ElType. For now I set it to be uint
-		void set(uint value, uint index)
-		{
-			startPtr_[index] = value;
-		}
 		
 		void printLinear() const
 		{
@@ -155,6 +108,13 @@ class tensor
 			}
 
 		}
+
+		void set(uint value, uint index)
+		{
+		
+			startPtr_[index] = value;
+		}
+
 		void setInOrder()
 		{
 			uint index = 0;
@@ -167,38 +127,120 @@ class tensor
 				customPtr++;
 			}
 		}
-		// This creates a copy.
+//OPERATOR OVERLOADS------------------------------------------
+		tensor operator[](uint desiredRow) const
+		{
+			ElType** rowStart = mixedPtr_ + (col_* (desiredRow));
+			tensor<ElType> res = tensor(col_, startPtr_);
+			res.col_ = this -> col_;
+			res.row_ = 1;
+			for(uint iter = 0; iter < col_; iter++)
+			{
+				res.mixedPtr_[iter] = *(rowStart + iter);
+			}	
+
+			return res;
+		}
+	
+		// Transpose
+		tensor operator~()
+		{
+			tensor<ElType> res = tensor<ElType>(size_, startPtr_);
+			res.row_ = col_;
+			res.col_ = row_;
+			for(uint cter = 0; cter < row_ * col_; cter++)
+			{
+				ElType* tempPtr = startPtr_ + cter;
+				uint transposedIndex = mapPtrTranspose(startPtr_, tempPtr);
+				res.mixedPtr_[transposedIndex] = tempPtr;
+			}
+			return res;
+		}
+
+		void operator=(std::initializer_list<ElType> lst)
+		{
+			int i = 0;
+			for(float val : lst)
+			{
+				if(i == size_) break;
+				startPtr_[i] = val; 
+				i++;
+			}
+
+		}
+
+		//If you dont pass by reference, it tries to copy the argument. That results in
+		//shallow copy which inevitably results in segmentation fault because it just copies
+		//the data members which is supposed to be dynamically allocated. Then it tries to delete
+		//the pointer that's not dynamically allocated.
+		// TODO: Deep copy constructor or just use reference operator or ptr. 
 		tensor operator+(const tensor& Tensor1)
 		{
 			tensor<ElType> res(row_, col_);
 			
 			for (uint iter = 0; iter < size_; iter++)
 			{
-				ElType srcFirst 	= startPtr_[iter];
-				ElType srcSecond 	= Tensor1.startPtr_[iter];
-				res.startPtr_[iter] = srcFirst + srcSecond;
+				ElType* srcFirst 	= mixedPtr_[iter];
+				ElType* srcSecond 	= Tensor1.mixedPtr_[iter];
+				res.startPtr_[iter] = *srcFirst + *srcSecond;
 			}
 			res.print();
 			return res;
-
-
-
 			
 		}
 
-		tensor operator-(const tensor Tensor1)
+		tensor operator-(const tensor& Tensor1)
 		{
-		
+			tensor<ElType> res(row_, col_);
+			
+			for (uint iter = 0; iter < size_; iter++)
+			{
+				ElType* srcFirst 	= mixedPtr_[iter];
+				ElType* srcSecond 	= Tensor1.mixedPtr_[iter];
+				res.startPtr_[iter] = *srcFirst - *srcSecond;
+			}
+			res.print();
+			return res;
 			
 		}
-
-		tensor operator*(const tensor Tensor1)
+                                              
+		tensor operator*(const tensor& Tensor1)
 		{
-		
-			
-		}
+			if(Tensor1.col_ != row_)
+			{
+				std::cerr << "check dimensions of matrices.";
+			}
+ 			tensor<ElType> res(row_, Tensor1.col_);
 
-		tensor operator<<(const tensor Tensor1)
+			for(uint iter = 0; iter< res.size_; iter++)
+			{
+
+				ElType target = 0;
+				uint row_index = iter / res.col_;
+				uint col_index = iter % res.col_;
+				
+				
+
+
+				//ElType may not be scalar such that it is not necessarily 0. 
+				//This conflicts with templification?
+				//TODO: initialize such that it is kinda NULL.(zero in some sense but it not
+				//need to be scalar)
+				for(uint inner = 0; inner< col_; inner++)
+				{
+					ElType first 	= *mixedPtr_[row_index * col_ + inner];
+					ElType second 	= *Tensor1.mixedPtr_[col_index + Tensor1.col_ * inner]; 
+					
+					target	+= first * second;
+					
+				}
+				res.startPtr_[iter] = target;
+			}
+			res.print();
+			return res;
+		}                             
+                                              
+		tensor operator<<(const tensor& Tensor1)
 		{
 		
 			
@@ -225,6 +267,10 @@ class tensor
 			uint newIndex = row_index + col_index * row_;
 			return newIndex;
 		}
-
+		void setMixedPtr_()
+		{
+		
+			
+		}
 };
 #endif
