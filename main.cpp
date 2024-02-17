@@ -28,10 +28,9 @@ int main()
 	debug_first.setInOrder();
 	debug_first.print();
 
-	tensor<float> debug_second(3,2);
-	debug_second.setInOrder();
+	tensor<float> debug_second(3,2, 13);
 	debug_second.print();
-	debug_first * debug_second; 
+	
 	 
   	return 0;
  }

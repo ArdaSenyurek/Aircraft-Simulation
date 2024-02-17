@@ -54,6 +54,38 @@ class tensor
 			}	
 		}
 
+		tensor(uint row, uint col, uint val)
+		:
+			row_(row),
+			col_(col),
+			size_(row_ * col_)
+		{
+		
+			ElType* els = (ElType*)malloc(size_ * sizeof(ElType));
+			if (els == NULL) throw "tensor malloc error";
+			else
+			{
+				startPtr_ = els;
+				for(uint iter = 0; iter < size_; iter++)
+				{
+					startPtr_[iter] = val;
+				}
+				endPtr_ = startPtr_ + size_;
+			}	
+
+
+			ElType** trs = (ElType**)malloc(size_ * sizeof(ElType*));
+			if (trs == NULL) throw "tensor malloc error";
+			else
+			{
+				mixedPtr_ = trs;
+				
+				for(uint mix_iter = 0; mix_iter < size_; mix_iter++)
+				{
+					mixedPtr_[mix_iter] = startPtr_ + mix_iter;
+				}
+			}	
+		}
 		~tensor()
 		{
 			free(mixedPtr_);

@@ -37,5 +37,6 @@ void frame::rotate(float angle, const unsigned char axis)
 			break;
 	}
 	// TODO: Move assignment in tensor. Check it.
-	data_ = rCustom * &data_;
+	
+	data_ = rCustom * data_;
 }
