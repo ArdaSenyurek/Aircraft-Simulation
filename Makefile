@@ -5,7 +5,7 @@ CXX=g++
 CXXFLAGS=-std=c++11 -Wall -Werror=vla
 
 # Define the debugging flags
-DEBUGFLAGS=-g
+DEBUGFLAGS=-g -O0
 
 # Define the target executable
 TARGET=main
