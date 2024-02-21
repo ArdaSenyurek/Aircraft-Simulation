@@ -24,12 +24,10 @@ int main()
 	debug[1].print();
 	
 	*/
-	tensor<float> debug_first(2,3);
-	debug_first.setInOrder();
-	debug_first.print();
+	body	tHandle;
+	tHandle.print();
 
-	tensor<float> debug_second(3,2, 13);
-	debug_second.print();
+
 	
 	 
   	return 0;

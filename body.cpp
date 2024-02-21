@@ -1,14 +1,25 @@
 #include "tensor.h"
 #include "frame.h"
 #include "body.h"
+#include <iostream>
 
-body::body(int label)
-	:	
-	inertia_(3, 3),
-	frame_(),
-	pos_(1,3),
-	vel_(1,3)
-	
+
+body::body()
+	:
+		MoI(3,3,0),
+		mass_(0.0)
 {
-	
+
+}
+
+
+
+void body::print() const
+{
+
+	kinematics_.print();
+	std::cout << "---------"	<< std::endl;
+	dynamics_.print();
+	std::cout << "MOI Tensor: " 	<< std::endl; MoI.print(); 
+	std::cout << "Mass: " 		<<  mass_ << std::endl;
 }
