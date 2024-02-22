@@ -1,11 +1,10 @@
 #include <iostream>
 #include "environment.h"
 #include "tensor.h"
-/*
 #include "frame.h"
 #include "body.h"
-*/
 #include "uint.h"
+#include "odeSolver.h"
 
 
 int main()
@@ -25,10 +24,6 @@ int main()
 	std::cout << "/////" << std::endl;
 	debug[1].print();
 	
-	body	tHandle;
-	tHandle.print();
-	*/
-
 	tensor<float> asd1(2,3);
 	asd1.setInOrder();
 	asd1.print();
@@ -49,8 +44,11 @@ int main()
 	asd1.print();
 	asd2.print();
 	asd3.print();
-	/*
 	*/
 	 
+	body	tHandle;
+	tHandle.print();
+
+
   	return 0;
  }

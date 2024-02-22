@@ -13,6 +13,7 @@ class body
 	private:
 		kinematic 	kinematics_;
 		dynamic		dynamics_;
+		
 		tensor<float>	MoI;
 		float		mass_;
 		

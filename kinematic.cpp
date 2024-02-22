@@ -12,24 +12,24 @@ kinematic::kinematic()
 }
 
 
-tensor<float>& kinematic::getUvw() const
+tensor<float> kinematic::getUvw() const
 {
 	return uvw_;
 }
 
-tensor<float>& kinematic::getPqr() const
+tensor<float> kinematic::getPqr() const
 {
 
 	return pqr_;
 }
 
-tensor<float>& kinematic::getEulers() const 
+tensor<float> kinematic::getEulers() const 
 {
 
 	return eulers_;
 }
 
-tensor<float>& kinematic::getMapper() const
+tensor<float> kinematic::getMapper() const
 {
 
 	return mapper_;

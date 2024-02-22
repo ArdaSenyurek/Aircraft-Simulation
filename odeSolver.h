@@ -16,7 +16,6 @@ class odeSolver
 	private:
 		uint timeStep_;
 		uint simTime_;
-		solution solution_;
 		body*	body_;
 		
 		

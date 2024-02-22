@@ -2,7 +2,6 @@
 #define DYNAMIC_H
 
 
-#include "angLin.h"
 #include "tensor.h"
 
 class dynamic
@@ -11,8 +10,8 @@ class dynamic
 	public:
 			
 		dynamic();
-		tensor<float>& getForce() const;
-		tensor<float>& getMoment() const;
+		tensor<float> getForce()  const;
+		tensor<float> getMoment() const;
 
 		void setForce	(const tensor<float>&);
 		void setMoment	(const tensor<float>&);

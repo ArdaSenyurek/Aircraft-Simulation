@@ -11,11 +11,11 @@ dynamic::dynamic()
 
 
 
-tensor<float>& dynamic::getForce() const
+tensor<float> dynamic::getForce() const
 {
 	return force_;
 }
-tensor<float>& dynamic::getmoment() const
+tensor<float> dynamic::getmoment() const
 {
 	return moment_;
 }
