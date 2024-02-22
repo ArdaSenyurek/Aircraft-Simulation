@@ -10,9 +10,8 @@ DEBUGFLAGS=-g -O0
 # Define the target executable
 TARGET=main
 TARGET_DEBUG=main_debug
-
 # Define the source files
-SRCS=main.cpp environment.cpp frame.cpp body.cpp kinematic.cpp dynamic.cpp angLin.cpp
+SRCS=main.cpp environment.cpp frame.cpp body.cpp kinematic.cpp dynamic.cpp 
 
 # Define the object files from the source files
 OBJS=$(SRCS:.cpp=.o)
