@@ -11,12 +11,13 @@ class odeSolver
 {
 	public:
 		// body, timestep, and simulation time.
-		odeSolver(body, float, uint);
+		odeSolver(body*, float, uint);
 		void solve();
 	private:
 		uint timeStep_;
 		uint simTime_;
 		solution solution_;
+		body*	body_;
 		
 		
 };
