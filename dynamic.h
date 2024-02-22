@@ -12,18 +12,16 @@ class dynamic
 			
 		dynamic();
 		void setForce		(const tensor<float>&);
-		void setForceDot	(const tensor<float>&);
 		void setMoment		(const tensor<float>&);
-		void setMomentDot	(const tensor<float>&);
 
 
-		void print() const ;
+		void print() const;
 
 	private:
 		uint refFrameLabel_;
 		
-		angLin	forceAndDot_;
-		angLin	momentAndDot_;
+		tensor<float> force_;
+		tensor<float> moment_;
 		
 };
 

@@ -1,7 +1,6 @@
 #ifndef KINEMATIC_H
 #define KINEMATIC_H
 
-#include "angLin.h"
 #include "tensor.h"
 
 class kinematic
@@ -11,19 +10,21 @@ class kinematic
 			
 		kinematic();
 
-		void setLinVel(const tensor<float>&);
-		void setLinAcc(const tensor<float>&);
-		void setAngVel(const tensor<float>&);
-		void setAngAcc(const tensor<float>&);
-
+		void setUvw(const tensor<float>&);
+		void setPqr(const tensor<float>&);
+		void setEulers(const tensor<float>&);
+		void setMapper(const tensor<float>&);
 
 		void print() const;
 
 	private:
 		uint refFrameLabel_;
 		
-		angLin linear_;
-		angLin angular_;
+		tensor<float> uvw_;
+		tensor<float> pqr_;
+		tensor<float> eulers_;
+		// Transformation matrix.
+		tensor<float> mapper_;
 
 		
 };

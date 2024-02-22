@@ -3,43 +3,46 @@
 kinematic::kinematic()
 	:
 		refFrameLabel_(0),
-		linear_(0),
-		angular_(0)
+		uvw_	(3,1,0),
+		pqr_	(3,1,0),
+		eulers_	(3,1,0),
+		mapper_	(3,1,0)
+
 {
 }
 
 
-void kinematic::setLinVel(const tensor<float>& newT)
+void kinematic::setUvw(const tensor<float>& newT)
 {
 
-	linear_.customVel_ = newT;
+	uvw_ = newT;
 }
 
-void kinematic::setLinAcc(const tensor<float>& newT)
+void kinematic::setPqr(const tensor<float>& newT)
 {
 
-	linear_.customAcc_ = newT;
+	pqr_ = newT;
 }
 
 
-void kinematic::setAngVel(const tensor<float>& newT)
+void kinematic::setEulers(const tensor<float>& newT)
 {
 
-	angular_.customVel_ = newT;
+	eulers_ = newT;
 }
 
-void kinematic::setAngAcc(const tensor<float>& newT)
+void kinematic::setMapper(const tensor<float>& newT)
 {
 
-	angular_.customAcc_ = newT;
+	mapper_ = newT;
 }
 
 void kinematic::print() const
 {
 
-	std::cout << "linear velocity: "     << std::endl;	linear_.customVel_.print();
-	std::cout << "linear Acceleration: " << std::endl;	linear_.customAcc_.print();
-	std::cout << "Angular velocity: "    << std::endl;	angular_.customVel_.print();
-	std::cout << "Angular Acceleration: "<< std::endl;	angular_.customAcc_.print();
+	std::cout << "uvw: "		<< std::endl;	uvw_.print();
+	std::cout << "pqr: "		<< std::endl;	pqr_.print();
+	std::cout << "eulers: "    	<< std::endl;	eulers_.print();
+	std::cout << "mapper: "		<< std::endl;	mapper_.print();
 }
 
