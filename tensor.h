@@ -86,12 +86,43 @@ class tensor
 				}
 			}	
 		}
+
+		tensor(tensor<ElType>&& other)
+		{
+			startPtr_ 	= other.startPtr_;
+			mixedPtr_ 	= other.mixedPtr_;
+			endPtr_		= other.endPtr_;
+			row_		= other.row_;
+			col_		= other.col_;
+			size_		= other.size_;
+
+			other.startPtr_ = nullptr;
+                        other.mixedPtr_ = nullptr;
+                        other.endPtr_   = nullptr;
+			
+		}
 		~tensor()
 		{
 			free(mixedPtr_);
 			free(startPtr_);
 
 		}
+		tensor<ElType>& operator=(tensor<ElType>&& other)
+		{
+			startPtr_ 	= other.startPtr_;
+			mixedPtr_ 	= other.mixedPtr_;
+			endPtr_		= other.endPtr_;
+			row_		= other.row_;
+			col_		= other.col_;
+			size_		= other.size_;
+
+			other.startPtr_ = nullptr;
+                        other.mixedPtr_ = nullptr;
+                        other.endPtr_   = nullptr;
+			
+			return *this;
+		}
+
 //------------------
 		ElType* getPtr() const
 		{
@@ -128,17 +159,18 @@ class tensor
 			std::cout << "| ";
 			while(iterPtr != mixedPtr_ + size_)
 			{
-				std::cout << **iterPtr << " ";
+				std::cout << **iterPtr << "\t\t";
 				iterPtr++;
 				ctr++;
 				if (ctr % col_ == 0)
 				{
-					if(ctr == size_) std::cout << "|\n";
-					else 		 std::cout << "|\n| ";
+					if(ctr == size_) std::cout << "\b\b\b\b\b\b\b\b\b\b|\n";
+					else 		 std::cout << "\b\b\b\b\b\b\b\b\b\b|\n| ";
 				}	 
 
 			}
 
+		std::cout << "----" << std::endl;
 		}
 
 		void set(uint value, uint index)
@@ -238,12 +270,14 @@ class tensor
                                               
 		tensor operator*(const tensor& Tensor1)
 		{
-			if(Tensor1.col_ != row_)
+ 			tensor<ElType> res(row_, Tensor1.col_);
+			if(col_ != Tensor1.row_)
 			{
 				std::cerr << "check dimensions of matrices.";
+				exit(EXIT_FAILURE);
 			}
- 			tensor<ElType> res(row_, Tensor1.col_);
-
+			else{
+			
 			for(uint iter = 0; iter< res.size_; iter++)
 			{
 
@@ -268,7 +302,8 @@ class tensor
 				}
 				res.startPtr_[iter] = target;
 			}
-			res.print();
+				
+			}
 			return res;
 		}                             
                                               
