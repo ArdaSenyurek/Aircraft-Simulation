@@ -9,10 +9,20 @@ dynamic::dynamic()
 }
 
 
-void dynamic::setForce(const	tensor<float>& newT)
+
+
+tensor<float>& dynamic::getForce() const
+{
+	return force_;
+}
+tensor<float>& dynamic::getmoment() const
+{
+	return moment_;
+}
+void dynamic::setForce(const tensor<float>& newt)
 {
 
-	force_ = newT;
+	force_ = newt;
 }
 
 

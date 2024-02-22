@@ -12,6 +12,29 @@ kinematic::kinematic()
 }
 
 
+tensor<float>& kinematic::getUvw() const
+{
+	return uvw_;
+}
+
+tensor<float>& kinematic::getPqr() const
+{
+
+	return pqr_;
+}
+
+tensor<float>& kinematic::getEulers() const 
+{
+
+	return eulers_;
+}
+
+tensor<float>& kinematic::getMapper() const
+{
+
+	return mapper_;
+}
+
 void kinematic::setUvw(const tensor<float>& newT)
 {
 

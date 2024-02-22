@@ -10,6 +10,11 @@ class kinematic
 			
 		kinematic();
 
+		tensor<float>& getUvw	() const;
+		tensor<float>& getPqr	() const;
+		tensor<float>& getEulers() const;
+		tensor<float>& getMapper() const;
+
 		void setUvw(const tensor<float>&);
 		void setPqr(const tensor<float>&);
 		void setEulers(const tensor<float>&);

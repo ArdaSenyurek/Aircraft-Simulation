@@ -11,8 +11,11 @@ class dynamic
 	public:
 			
 		dynamic();
-		void setForce		(const tensor<float>&);
-		void setMoment		(const tensor<float>&);
+		tensor<float>& getForce() const;
+		tensor<float>& getMoment() const;
+
+		void setForce	(const tensor<float>&);
+		void setMoment	(const tensor<float>&);
 
 
 		void print() const;
