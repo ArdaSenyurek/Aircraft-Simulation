@@ -3,9 +3,10 @@
 dynamic::dynamic()
 	:
 		refFrameLabel_(0),
-		force_(3,1,0),
+		force_(3,1,3),
 		moment_(3,1,0)
 {
+	moment_.setInOrder();
 }
 
 

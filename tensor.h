@@ -321,7 +321,7 @@ class tensor
 				ElType* srcSecond 	= Tensor1.mixedPtr_[iter];
 				res.startPtr_[iter] = *srcFirst + *srcSecond;
 			}
-			std::cout << "operator - icindeyim" << std::endl;
+			std::cout << "operator + icindeyim" << std::endl;
 			res.print();
 			return res;
 
@@ -410,8 +410,11 @@ class tensor
 			ElType q = *mixedPtr_[1];
 			ElType r = *mixedPtr_[2];
 
-			skew ={	0,	-r, 	q, r,	0,	-p,	-q,	p,	0};
-			
+			skew ={	0,	-r, 	q, 
+				r,	0,	-p,
+				-q,	p,	0};
+			std::cout << "skew:" << std::endl;
+			skew.print() ;
  			tensor<ElType> res(3, 1);
 			res = skew * Tensor1;
 			std::cout << "operator % icindeyim" << std::endl;

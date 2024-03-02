@@ -36,7 +36,7 @@ $(TARGET_DEBUG): $(OBJS_DEBUG)
 
 # Define the clean rule
 clean:
-	rm -f $(TARGET) $(TARGET_DEBUG) $(OBJS) $(OBJS_DEBUG)
+	del -f $(TARGET) $(TARGET_DEBUG) $(OBJS) $(OBJS_DEBUG)
 
 # Define the rule for making the target
 all: $(TARGET)
