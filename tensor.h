@@ -372,9 +372,18 @@ class tensor
 			return res;
 		}                             
                                               
-		tensor operator<<(const tensor& Tensor1)
+		tensor operator/(const ElType scalar)
 		{
-		
+ 			tensor<ElType> res(row_, col_);
+			for(uint iter = 0; iter < size_; iter++)
+			{
+				
+				ElType old = *mixedPtr_[iter];
+				ElType newVal = old * scalar;
+				res.startPtr_[iter] = newVal;
+			}
+			
+			return res;
 			
 		}
 
