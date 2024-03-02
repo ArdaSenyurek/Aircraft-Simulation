@@ -350,7 +350,7 @@ class tensor
  			tensor<ElType> res(row_, Tensor1.col_);
 			if(col_ != Tensor1.row_)
 			{
-				std::cerr << "check dimensions of matrices.*" ;
+				std::cerr << "Arda dimensions of matrices." ;
 				exit(EXIT_FAILURE);
 			}
 			else{

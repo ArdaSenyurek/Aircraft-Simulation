@@ -3,6 +3,7 @@
 
 #include "kinematic.h"
 #include "dynamic.h"
+#include "tensor.h"
 
 class body
 {

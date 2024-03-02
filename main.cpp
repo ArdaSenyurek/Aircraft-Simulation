@@ -2,7 +2,7 @@
 
 #include "uint.h"
 #include "environment.h"
-#include "tensor2.h"
+#include "tensor.h"
 #include "frame.h"
 #include "body.h"
 #include "odeSolver.h"
@@ -74,12 +74,17 @@ int main()
 	tensor<float>* Adress_res  = &res;
 	res = ~(asd4 * asd2) / 3  - (deneme * asd4);
 	res.print();
+	tensor<float> asd2(3,2, 13);
+	asd2.print();
+	tensor<float> asd3(2,2, 15);
+	asd3.print();
+	std::cout << "-----------------------------------------------------------------" << std::endl;
+	asd2 * asd3; 
 	*/
 	body		t;
 	t.print();
 	odeSolver	solver1(&t, 0.001, 1);
 	solver1.solve();
-
 
 
   	return 0;

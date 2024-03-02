@@ -7,7 +7,7 @@
 body::body()
 	:
 		MoI_(3,3,0),
-		mass_(0.0)
+		mass_(3.0)
 {
 
 }
