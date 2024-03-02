@@ -36,8 +36,15 @@ void odeSolver::solve()
 		tensor<float> moment	= body_ -> dynamics_.getMoment();
 
 
-		tensor<float>uvwDot = (force + moment) / mass + (mapper * gravity) - (pqr << uvw);
-                tensor<float>pqrDot = ~moi * (moment - pqr << (moi * pqr));
+		tensor<float>* Adress_pqr 	= &pqr;
+		tensor<float>* Adress_uvw 	= &uvw;
+		tensor<float>* Adress_eulers 	= &eulers;
+		tensor<float>* Adress_mapper 	= &mapper;
+		tensor<float>* Adress_gravity 	= &gravity;
+
+
+		tensor<float>uvwDot = (force + moment) / mass + (mapper * gravity) - (pqr % uvw);
+                tensor<float>pqrDot = ~moi * (moment - pqr % (moi * pqr));
 		
 
 

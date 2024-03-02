@@ -6,7 +6,7 @@ kinematic::kinematic()
 		uvw_	(3,1,0),
 		pqr_	(3,1,0),
 		eulers_	(3,1,0),
-		mapper_	(3,1,0)
+		mapper_	(3,3,0)
 
 {
 }
