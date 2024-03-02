@@ -139,7 +139,7 @@ class tensor
 		~tensor()
 		{
 			free(mixedPtr_);
-			free(startPtr_);
+			if (isTranspose_ == 0) free(startPtr_);
 
 		}
 
@@ -263,6 +263,11 @@ class tensor
 		// Transpose
 		tensor operator~()
 		{
+			//This is no good. res is local. It's freed after scope.
+			//But it points to same, i.e startPtr = this -> startPtr.
+			//Then in main *this is freed when hits return 0.
+			//This results in segFault. It tries to free a pointer
+			//that's already freed. (res deleted in the first place).
 			tensor<ElType> res = tensor<ElType>(size_, startPtr_);
 			res.row_ = col_;
 			res.col_ = row_;
@@ -272,12 +277,18 @@ class tensor
 				uint transposedIndex = mapPtrTranspose(startPtr_, tempPtr);
 				res.mixedPtr_[transposedIndex] = tempPtr;
 			}
+			res.isTranspose_ = true;
 			return res;
 		}
 
 		void operator=(std::initializer_list<ElType> lst)
 		{
-			int i = 0;
+			if (lst.size() != row_ * col_)
+			{
+				std::cerr << "check dimensions of init_list.";
+				exit(EXIT_FAILURE);
+			}
+			uint i = 0;
 			for(float val : lst)
 			{
 				if(i == size_) break;
@@ -378,6 +389,7 @@ class tensor
 		// This is for transpose
 		ElType**	mixedPtr_;
 		uint		size_;	
+		bool isTranspose_ = 0;
 
 		uint mapPtrTranspose(ElType* start, ElType* normal) const
 		{
