@@ -15,7 +15,7 @@ tensor<float> dynamic::getForce() const
 {
 	return force_;
 }
-tensor<float> dynamic::getmoment() const
+tensor<float> dynamic::getMoment() const
 {
 	return moment_;
 }

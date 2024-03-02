@@ -2,6 +2,7 @@
 #define ODESOLVER_H
 
 #include "uint.h"
+#include "body.h"
 
 
 // This takes a handful of parameters and updates them

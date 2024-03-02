@@ -8,12 +8,11 @@ class body
 {
 
 	public:
-		void print() const;
 		body();
-	private:
+		void print() const;
+		
 		kinematic 	kinematics_;
 		dynamic		dynamics_;
-		
 		tensor<float>	MoI;
 		float		mass_;
 		

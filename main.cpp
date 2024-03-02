@@ -3,11 +3,9 @@
 #include "uint.h"
 #include "environment.h"
 #include "tensor.h"
-/*
 #include "frame.h"
 #include "body.h"
 #include "odeSolver.h"
-*/
 
 
 int main()

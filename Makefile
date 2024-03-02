@@ -11,7 +11,8 @@ DEBUGFLAGS=-g -O0
 TARGET=main
 TARGET_DEBUG=main_debug
 # Define the source files
-SRCS=main.cpp environment.cpp frame.cpp body.cpp kinematic.cpp dynamic.cpp odeSolver.cpp
+SRCS=main.cpp environment.cpp frame.cpp body.cpp kinematic.cpp dynamic.cpp
+
 
 # Define the object files from the source files
 OBJS=$(SRCS:.cpp=.o)
@@ -45,7 +46,7 @@ run: $(TARGET)
 	./$(TARGET)
 
 # Define the rule for running the debug executable
-run_gdb: $(TARGET_DEBUG)
+rungdb: $(TARGET_DEBUG)
 	gdb ./$(TARGET_DEBUG)
 
-.PHONY: clean all run run_gdb
+.PHONY: clean all run rungdb
