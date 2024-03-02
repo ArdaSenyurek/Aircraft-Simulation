@@ -13,7 +13,7 @@ class body
 		
 		kinematic 	kinematics_;
 		dynamic		dynamics_;
-		tensor<float>	MoI;
+		tensor<float>	MoI_;
 		float		mass_;
 		
 };
