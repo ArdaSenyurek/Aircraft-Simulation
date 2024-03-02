@@ -46,7 +46,6 @@ int main()
 	asd2.print();
 	asd3.print();
 	
-	*/
 	tensor<float> asd2(3,1);
 	asd2 = {2, 
 		4, 
@@ -66,17 +65,20 @@ int main()
 	asd4.print();
 	tensor<float> res(3,1);
 
+
+	tensor<float> deneme(1,3, 13);
+
 	tensor<float>* Adress_asd1 = &asd2;
 	tensor<float>* Adress_asd2 = &asd3;
 	tensor<float>* Adress_asd3 = &asd4;
 	tensor<float>* Adress_res  = &res;
-	res = ~(asd4 * asd2);
-	//res.print();
-	/*
-	body		t;
-	odeSolver	solver1(&t, 1, 0.001);
-	solver1.solve();
+	res = ~(asd4 * asd2) / 3  - (deneme * asd4);
+	res.print();
 	*/
+	body		t;
+	t.print();
+	odeSolver	solver1(&t, 0.001, 1);
+	solver1.solve();
 
 
 

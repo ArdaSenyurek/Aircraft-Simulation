@@ -344,7 +344,8 @@ class tensor
  			tensor<ElType> res(row_, Tensor1.col_);
 			if(col_ != Tensor1.row_)
 			{
-				std::cerr << "check dimensions of matrices.";
+				std::cerr << "check dimensions of matrices."
+				<<  "This: " << &Tensor1;
 				exit(EXIT_FAILURE);
 			}
 			else{
@@ -387,10 +388,27 @@ class tensor
 			{
 				
 				ElType old = *mixedPtr_[iter];
-				ElType newVal = old * scalar;
+				ElType newVal = old / scalar;
 				res.startPtr_[iter] = newVal;
 			}
+			res.print();
+			return res;
 			
+		}
+		// This is strictly used for skew matrices.
+		tensor operator<<(const tensor& Tensor1)
+		{
+ 			tensor<ElType> skew(3, 3);
+			ElType p = *mixedPtr_[0];
+			ElType q = *mixedPtr_[1];
+			ElType r = *mixedPtr_[2];
+
+			skew ={	0,	-r, 	q,
+			      	r,	0,	-p,
+				-q,	p,	0};
+			
+ 			tensor<ElType> res(3, 1);
+			res = skew * Tensor1;
 			return res;
 			
 		}
