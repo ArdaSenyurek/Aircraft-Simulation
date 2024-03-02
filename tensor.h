@@ -139,7 +139,8 @@ class tensor
 		~tensor()
 		{
 			free(mixedPtr_);
-			if (isTranspose_ == 0) free(startPtr_);
+			if (isTranspose_ == 0) 
+			free(startPtr_);
 
 		}
 
@@ -173,6 +174,7 @@ class tensor
 			other.startPtr_ = nullptr;
                         other.mixedPtr_ = nullptr;
                         other.endPtr_   = nullptr;
+			other.isTranspose_ = false;
 			
 			return *this;
 		}
@@ -278,6 +280,10 @@ class tensor
 				res.mixedPtr_[transposedIndex] = tempPtr;
 			}
 			res.isTranspose_ = true;
+			res.print();
+			isTranspose_ = true;
+
+			tensor<float>* Adress_res  = &res;
 			return res;
 		}
 
@@ -369,6 +375,8 @@ class tensor
 			}
 				
 			}
+			res.print();
+			tensor<float>* Adress_res  = &res;
 			return res;
 		}                             
                                               

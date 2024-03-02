@@ -46,6 +46,7 @@ int main()
 	asd2.print();
 	asd3.print();
 	
+	*/
 	tensor<float> asd2(3,1);
 	asd2 = {2, 
 		4, 
@@ -69,14 +70,14 @@ int main()
 	tensor<float>* Adress_asd2 = &asd3;
 	tensor<float>* Adress_asd3 = &asd4;
 	tensor<float>* Adress_res  = &res;
-	res = asd3 - ~asd4 * asd2;
-	std::cout << "printed" << std::endl;
-	res.print();
-
-	*/
+	res = ~(asd4 * asd2);
+	//res.print();
+	/*
 	body		t;
 	odeSolver	solver1(&t, 1, 0.001);
 	solver1.solve();
+	*/
+
 
 
   	return 0;
