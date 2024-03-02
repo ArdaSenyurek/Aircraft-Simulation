@@ -44,9 +44,11 @@ all: $(TARGET)
 # Define the rule for running the executable
 run: $(TARGET)
 	./$(TARGET)
+	make clean
 
 # Define the rule for running the debug executable
 rungdb: $(TARGET_DEBUG)
 	gdb ./$(TARGET_DEBUG)
+	make clean
 
 .PHONY: clean all run rungdb

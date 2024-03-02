@@ -76,16 +76,17 @@ int main()
 	res.print();
 	tensor<float> asd2(3,2, 13);
 	asd2.print();
-	tensor<float> asd3(2,2, 15);
+	tensor<float> asd3(3,2, 15);
 	asd3.print();
 	std::cout << "-----------------------------------------------------------------" << std::endl;
 	asd2 * asd3; 
+
 	*/
 	body		t;
 	t.print();
+
 	odeSolver	solver1(&t, 0.001, 1);
 	solver1.solve();
-
 
   	return 0;
  }
