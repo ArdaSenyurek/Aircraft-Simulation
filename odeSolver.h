@@ -18,6 +18,9 @@ class odeSolver
 		uint timeStep_;
 		uint simTime_;
 		body*	body_;
+		// pqr,uvw,eulers,mapper, moment, forces
+		tensor<float> solution_;
+		void setInitials(body*);
 		
 		
 };

@@ -3,12 +3,15 @@
 kinematic::kinematic()
 	:
 		refFrameLabel_(0),
-		uvw_	(3,1,7),
+		uvw_	(3,1,0),
 		pqr_	(3,1,0),
 		eulers_	(3,1,0),
-		mapper_	(3,3,0)
+		mapper_	(3,3,0),
+		gravity_(3,1,0)
 
 {
+       	gravity_ = {0, 0, -9.81};
+       
 	//uvw_.setInOrder();
 	pqr_.setInOrder();
 	eulers_.setInOrder();

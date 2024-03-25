@@ -20,10 +20,13 @@ class dynamic
 		void print() const;
 
 	private:
-		uint refFrameLabel_;
+		// body = 1, inertial = 0.
+		uint refFrameLabel_ = 1;
 		
 		tensor<float> force_;
 		tensor<float> moment_;
+		tensor<float> gravity_;
+
 		
 };
 

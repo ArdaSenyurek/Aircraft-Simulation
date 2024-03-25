@@ -237,6 +237,7 @@ class tensor
 			startPtr_[index] = value;
 		}
 
+
 		void setInOrder()
 		{
 			uint index = 0;
@@ -263,6 +264,7 @@ class tensor
 
 			return res;
 		}
+		
 	
 		// Transpose
 		tensor operator~()

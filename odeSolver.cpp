@@ -5,7 +5,8 @@ odeSolver::odeSolver(body* myBody, float timeStep, uint time)
 	:
 		timeStep_(timeStep),
 		simTime_(time),
-		body_(myBody)
+		body_(myBody),
+		solution_(timeStep_* time, 18, 0)
 {
 }
 
@@ -14,8 +15,6 @@ void odeSolver::solve()
 {
 	float time = 0.0;
 
-	tensor<float> gravity(3,1);
-       gravity = {0, 0, -9.81};
 
 
 	while(time < simTime_)
@@ -25,13 +24,13 @@ void odeSolver::solve()
 		// TODO: Can't directly access body -> kinematics_. Then I need to write getter which returns by value.
 		// This demands copy constructor of kinematic class.
 		tensor<float> moi	= body_ -> MoI_;
-		float mass	= body_ -> mass_;
+		float 	      mass	= body_ -> mass_;
 
 		tensor<float> pqr 	= body_ -> kinematics_.getPqr();
 		tensor<float> uvw 	= body_ -> kinematics_.getUvw();
-		tensor<float> eulers	= body_ -> kinematics_.getEulers();
 		tensor<float> mapper 	= body_ -> kinematics_.getMapper();
 
+		tensor<float> gravity 	= body_ -> dynamics_.getGravity();
 		tensor<float> force     = body_ -> dynamics_.getForce();
 		tensor<float> moment	= body_ -> dynamics_.getMoment();
 
@@ -57,4 +56,10 @@ void odeSolver::solve()
 		
 		time += simTime_;
 	}
+}
+
+void odeSolver::setInitials(body* target)
+{
+
+	
 }
