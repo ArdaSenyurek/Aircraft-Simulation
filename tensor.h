@@ -237,7 +237,10 @@ class tensor
 			startPtr_[index] = value;
 		}
 
-
+		ElType get()
+		{
+			return **mixedPtr_;
+		}
 		void setInOrder()
 		{
 			uint index = 0;
@@ -261,10 +264,14 @@ class tensor
 			{
 				res.mixedPtr_[iter] = *(rowStart + iter);
 			}	
-
 			return res;
 		}
 		
+		ElType operator()(uint i, uint j) const
+		{
+			// TODO: Assert i & j is less than row,col respectively.
+			return *mixedPtr_[i * row_ + j];
+		}
 	
 		// Transpose
 		tensor operator~()
@@ -364,9 +371,6 @@ class tensor
 				uint row_index = iter / res.col_;
 				uint col_index = iter % res.col_;
 				
-				
-
-
 				//ElType may not be scalar such that it is not necessarily 0. 
 				//This conflicts with templification?
 				//TODO: initialize such that it is kinda NULL.(zero in some sense but it not
