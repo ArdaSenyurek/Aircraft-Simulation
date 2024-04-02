@@ -101,7 +101,7 @@ class tensor
                         other.endPtr_   = nullptr;
 			
 		}
-
+		// Copy Constructor
 		tensor(const tensor<ElType>& other)
 			:
 				row_(other.row_),
@@ -135,7 +135,10 @@ class tensor
 						mixedPtr_[mix_iter] = startPtr_ + mix_iter;
 					}
 				}
+				std::cout << "ha" << std::endl;
+				printLinear();
 			}
+		//Destructor
 		~tensor()
 		{
 			free(mixedPtr_);
@@ -143,7 +146,7 @@ class tensor
 			free(startPtr_);
 
 		}
-
+		//Copy Assignment
 		tensor<ElType>& operator=(const tensor<ElType>& other)
 		{
 			if(col_ != other.col_ && row_ != other.row_)
@@ -162,6 +165,7 @@ class tensor
 
 			return *this;
 		}
+		//Move Assignment
 		tensor<ElType>& operator=(tensor<ElType>&& other)
 		{
 			startPtr_ 	= other.startPtr_;
@@ -237,7 +241,7 @@ class tensor
 			startPtr_[index] = value;
 		}
 
-		ElType get()
+		ElType get() const
 		{
 			return **mixedPtr_;
 		}
@@ -252,6 +256,10 @@ class tensor
 				index++;
 				customPtr++;
 			}
+		}
+		void set(uint i, uint j, ElType val)
+		{
+			*mixedPtr_[i * col_ + j] = val;
 		}
 //OPERATOR OVERLOADS------------------------------------------
 		tensor operator[](uint desiredRow) const
@@ -270,7 +278,7 @@ class tensor
 		ElType operator()(uint i, uint j) const
 		{
 			// TODO: Assert i & j is less than row,col respectively.
-			return *mixedPtr_[i * row_ + j];
+			return *mixedPtr_[i * col_ + j];
 		}
 	
 		// Transpose
