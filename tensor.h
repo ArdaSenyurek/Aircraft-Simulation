@@ -11,18 +11,6 @@ class tensor
 {
 	public:
 
-
-		tensor(uint size, ElType* dataPtr)
-		:
-			startPtr_(dataPtr),
-			size_(size)
-		{
-			endPtr_ = startPtr_ + size_;
-			ElType** trs = (ElType**)malloc(size_ * sizeof(ElType*));
-			if 	(trs == NULL) throw "tensor malloc error";
-			else 	mixedPtr_ = trs;
-		}
-
 		// Use this when have no tensor at hand
 		tensor(uint row, uint col)
 		:
@@ -38,20 +26,6 @@ class tensor
 				startPtr_ = els;
 			}	
 			endPtr_ = startPtr_ + size_;
-
-
-			ElType** trs = (ElType**)malloc(size_ * sizeof(ElType*));
-			if (trs == NULL) throw "tensor malloc error";
-			else
-			{
-				mixedPtr_ = trs;
-				
-				for(uint mix_iter = 0; mix_iter < size_; mix_iter++)
-				{
-					mixedPtr_[mix_iter] = startPtr_ + mix_iter;
-				}
-
-			}	
 		}
 
 		tensor(uint row, uint col, uint val)
@@ -72,32 +46,17 @@ class tensor
 				}
 				endPtr_ = startPtr_ + size_;
 			}	
-
-
-			ElType** trs = (ElType**)malloc(size_ * sizeof(ElType*));
-			if (trs == NULL) throw "tensor malloc error";
-			else
-			{
-				mixedPtr_ = trs;
-				
-				for(uint mix_iter = 0; mix_iter < size_; mix_iter++)
-				{
-					mixedPtr_[mix_iter] = startPtr_ + mix_iter;
-				}
-			}	
 		}
 
 		tensor(tensor<ElType>&& other)
 		{
 			startPtr_ 	= other.startPtr_;
-			mixedPtr_ 	= other.mixedPtr_;
 			endPtr_		= other.endPtr_;
 			row_		= other.row_;
 			col_		= other.col_;
 			size_		= other.size_;
 
 			other.startPtr_ = nullptr;
-                        other.mixedPtr_ = nullptr;
                         other.endPtr_   = nullptr;
 			
 		}
@@ -118,25 +77,10 @@ class tensor
 					startPtr_ = els;
 					for(uint iter = 0; iter < size_; iter++)
 					{
-						startPtr_[iter] = *other.mixedPtr_[iter];
+						startPtr_[iter] = other.startPtr_[iter];
 					}
 					endPtr_ = startPtr_ + size_;
 				}	
-
-
-				ElType** trs = (ElType**)malloc(size_ * sizeof(ElType*));
-				if (trs == NULL) throw "tensor malloc error";
-				else
-				{
-					mixedPtr_ = trs;
-					
-					for(uint mix_iter = 0; mix_iter < size_; mix_iter++)
-					{
-						mixedPtr_[mix_iter] = startPtr_ + mix_iter;
-					}
-				}
-				std::cout << "ha" << std::endl;
-				printLinear();
 			}
 		//Destructor
 		~tensor()
@@ -157,7 +101,7 @@ class tensor
 			{
 				for(uint iter = 0; iter < size_; iter++)
 				{
-					startPtr_[iter] = *other.mixedPtr_[iter];
+					startPtr_[iter] = other.startPtr_[iter];
 				}
 			}
 
@@ -167,14 +111,12 @@ class tensor
 		tensor<ElType>& operator=(tensor<ElType>&& other)
 		{
 			startPtr_ 	= other.startPtr_;
-			mixedPtr_ 	= other.mixedPtr_;
 			endPtr_		= other.endPtr_;
 			row_		= other.row_;
 			col_		= other.col_;
 			size_		= other.size_;
 
 			other.startPtr_ = nullptr;
-                        other.mixedPtr_ = nullptr;
                         other.endPtr_   = nullptr;
 			
 			return *this;
@@ -196,27 +138,20 @@ class tensor
 			
 				std::cout << " " << startPtr_ + iter << " ";
 			}
-			std::cout << "\n";
+			std::cout << std::endl;
 
-			std::cout << "mixedPtr_: ";
-			for(uint iter = 0; iter < size_; iter++)
-			{
-			
-				std::cout << " " << mixedPtr_[iter] << " ";
-
-			}
-			std::cout << "\n";
+			std::cout << std::endl;
 
 		}
 
 		void print() const
 		{
 			uint ctr = 0;
-			ElType** iterPtr = mixedPtr_;
+			ElType* iterPtr = startPtr_;
 			std::cout << "| ";
-			while(iterPtr != mixedPtr_ + size_)
+			while(iterPtr != startPtr_ + size_)
 			{
-				std::cout << **iterPtr << "\t\t";
+				std::cout << *iterPtr << "\t\t";
 				iterPtr++;
 				ctr++;
 				if (ctr % col_ == 0)
@@ -240,7 +175,7 @@ class tensor
 
 		ElType get() const
 		{
-			return **mixedPtr_;
+			return *startPtr_;
 		}
 		void setInOrder()
 		{
@@ -256,7 +191,7 @@ class tensor
 		}
 		void set(uint i, uint j, ElType val)
 		{
-			*mixedPtr_[i * col_ + j] = val;
+			startPtr_[i * col_ + j] = val;
 		}
 //OPERATOR OVERLOADS------------------------------------------
 		tensor operator[](uint i) const
@@ -307,25 +242,20 @@ class tensor
 		}
 	
 		// Transpose
-		tensor operator~()
+		tensor operator~() const
 		{
 			//This is no good. res is local. It's freed after scope.
 			//But it points to same, i.e startPtr = this -> startPtr.
 			//Then in main *this is freed when hits return 0.
 			//This results in segFault. It tries to free a pointer
 			//that's already freed. (res deleted in the first place).
-			tensor<ElType> res = tensor<ElType>(size_, startPtr_);
-			res.row_ = col_;
-			res.col_ = row_;
+			tensor<ElType> res = tensor<ElType>(col_, row_);
 			for(uint cter = 0; cter < row_ * col_; cter++)
 			{
 				ElType* tempPtr = startPtr_ + cter;
 				uint transposedIndex = mapPtrTranspose(startPtr_, tempPtr);
-				res.mixedPtr_[transposedIndex] = tempPtr;
+				res.startPtr_[transposedIndex] = *tempPtr;
 			}
-			res.print();
-
-			tensor<float>* Adress_res  = &res;
 			return res;
 		}
 
@@ -502,7 +432,6 @@ class tensor
 		ElType* 	startPtr_;
 		ElType* 	endPtr_;
 		// This is for transpose
-		ElType**	mixedPtr_;
 		uint		size_;	
 
 		uint mapPtrTranspose(ElType* start, ElType* normal) const
