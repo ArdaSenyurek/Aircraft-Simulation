@@ -262,15 +262,13 @@ class tensor
 			*mixedPtr_[i * col_ + j] = val;
 		}
 //OPERATOR OVERLOADS------------------------------------------
-		tensor operator[](uint desiredRow) const
+		tensor operator[](uint j) const
 		{
-			ElType** rowStart = mixedPtr_ + (col_* (desiredRow));
-			tensor<ElType> res = tensor(col_, startPtr_);
-			res.col_ = this -> col_;
-			res.row_ = 1;
+			ElType* firstPtr = startPtr_ + (j * col_);
+			tensor<ElType> res = tensor(1, col_);
 			for(uint iter = 0; iter < col_; iter++)
 			{
-				res.mixedPtr_[iter] = *(rowStart + iter);
+				*(res.startPtr_ + iter) = firstPtr[iter];
 			}	
 			return res;
 		}
