@@ -377,60 +377,73 @@ class tensor
 			}
 
 		}
-
-		tensor operator-(const tensor& Tensor1)
+		tensor operator-(const tensor& other)
 		{
-			tensor<ElType> res(row_, col_);
-			
-			for (uint iter = 0; iter < size_; iter++)
+			try
 			{
-				ElType* srcFirst 	= mixedPtr_[iter];
-				ElType* srcSecond 	= Tensor1.mixedPtr_[iter];
-				res.startPtr_[iter] = *srcFirst - *srcSecond;
+				if(other.col_ == col_ && other.row_ == row_)
+				{
+					tensor<ElType> res(row_, col_);
+					
+					for (uint iter = 0; iter < size_; iter++)
+					{
+						ElType srcFirst		= startPtr_[iter];
+						ElType srcSecond	= other.startPtr_[iter];
+						res.startPtr_[iter] = srcFirst - srcSecond;
+					}
+					return res;
+				}
+				else throw 404;
 			}
-			std::cout << "operator - icindeyim" << std::endl;
-			res.print();
-			return res;
-			
+			catch(int errorId)
+			{
+				std::cerr << "Dimensions don't match" << std::endl;
+				std::cerr << "Err:" << errorId << std::endl;
+				exit(EXIT_FAILURE);
+			}
+
 		}
                                               
 		tensor operator*(const tensor& Tensor1)
 		{
- 			tensor<ElType> res(row_, Tensor1.col_);
-			if(col_ != Tensor1.row_)
+			try
 			{
-				std::cerr << "Arda dimensions of matrices." ;
+				tensor<ElType> res(row_, Tensor1.col_);
+				if(col_ == Tensor1.row_)
+				{
+				
+					for(uint iter = 0; iter< res.size_; iter++)
+					{
+
+						ElType target = 0;
+						uint row_index = iter / res.col_;
+						uint col_index = iter % res.col_;
+						
+						//ElType may not be scalar such that it is not necessarily 0. 
+						//This conflicts with templification?
+						//TODO: initialize such that it is kinda NULL.(zero in some sense but it not
+						//need to be scalar)
+						for(uint inner = 0; inner< col_; inner++)
+						{
+							ElType first 	= startPtr_[row_index * col_ + inner];
+							ElType second 	= Tensor1.startPtr_[col_index + Tensor1.col_ * inner]; 
+							
+							target	+= first * second;
+							
+						}
+						res.startPtr_[iter] = target;
+					}
+					return res;
+				}
+				else throw 405;
+				
+			}
+			catch(int errorId)
+			{
+				std::cerr << "Dimensions don't match" << std::endl;
+				std::cerr << "Err:" << errorId << std::endl;
 				exit(EXIT_FAILURE);
 			}
-			else{
-			
-			for(uint iter = 0; iter< res.size_; iter++)
-			{
-
-				ElType target = 0;
-				uint row_index = iter / res.col_;
-				uint col_index = iter % res.col_;
-				
-				//ElType may not be scalar such that it is not necessarily 0. 
-				//This conflicts with templification?
-				//TODO: initialize such that it is kinda NULL.(zero in some sense but it not
-				//need to be scalar)
-				for(uint inner = 0; inner< col_; inner++)
-				{
-					ElType first 	= *mixedPtr_[row_index * col_ + inner];
-					ElType second 	= *Tensor1.mixedPtr_[col_index + Tensor1.col_ * inner]; 
-					
-					target	+= first * second;
-					
-				}
-				res.startPtr_[iter] = target;
-			}
-				
-			}
-			std::cout << "operator * icindeyim" << std::endl;
-			res.print();
-			tensor<float>* Adress_res  = &res;
-			return res;
 		}                             
                                               
 		tensor operator/(const ElType scalar)
