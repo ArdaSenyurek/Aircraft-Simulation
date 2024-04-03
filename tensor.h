@@ -262,14 +262,14 @@ class tensor
 			*mixedPtr_[i * col_ + j] = val;
 		}
 //OPERATOR OVERLOADS------------------------------------------
-		tensor operator[](uint j) const
+		tensor operator[](uint i) const
 		{
 			try
 			{
 				tensor<ElType> res = tensor(1, col_);
-				if (j <= row_)
+				if (i <= row_)
 				{
-					ElType* firstPtr = startPtr_ + ((j - 1) * col_);
+					ElType* firstPtr = startPtr_ + ((i - 1) * col_);
 					for(uint iter = 0; iter < col_; iter++)
 					{
 						*(res.startPtr_ + iter) = firstPtr[iter];
@@ -290,8 +290,23 @@ class tensor
 		
 		ElType operator()(uint i, uint j) const
 		{
-			// TODO: Assert i & j is less than row,col respectively.
-			return startPtr_[i * col_ + j];
+			try
+			{
+				if(i <= row_ && j <= col_)
+				{
+				
+					return startPtr_[(i - 1) * col_ + (j - 1)];
+					
+				}
+				else throw 401;
+				
+			}
+			catch(int errorId)
+			{
+				std::cerr << "Index is out of bound." << std::endl;
+				std::cerr << "Err:" << errorId << std::endl;
+				exit(EXIT_FAILURE);
+			}
 		}
 	
 		// Transpose
