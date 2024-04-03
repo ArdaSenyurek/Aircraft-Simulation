@@ -351,28 +351,32 @@ class tensor
 
 		}
 
-		//If you dont pass by reference, it tries to copy the argument. That results in
-		//shallow copy which inevitably results in segmentation fault because it just copies
-		//the data members which is supposed to be dynamically allocated. Then it tries to delete
-		//the pointer that's not dynamically allocated.
-		// TODO: Deep copy constructor or just use reference operator or ptr. 
-		tensor operator+(const tensor& Tensor1)
+		tensor operator+(const tensor& other)
 		{
-			tensor<ElType> res(row_, col_);
-			
-			for (uint iter = 0; iter < size_; iter++)
+			try
 			{
-				ElType* srcFirst 	= mixedPtr_[iter];
-				ElType* srcSecond 	= Tensor1.mixedPtr_[iter];
-				res.startPtr_[iter] = *srcFirst + *srcSecond;
+				if(other.col_ == col_ && other.row_ == row_)
+				{
+					tensor<ElType> res(row_, col_);
+					
+					for (uint iter = 0; iter < size_; iter++)
+					{
+						ElType srcFirst		= startPtr_[iter];
+						ElType srcSecond	= other.startPtr_[iter];
+						res.startPtr_[iter] = srcFirst + srcSecond;
+					}
+					return res;
+				}
+				else throw 403;
 			}
-			std::cout << "operator + icindeyim" << std::endl;
-			res.print();
-			return res;
+			catch(int errorId)
+			{
+				std::cerr << "Dimensions don't match" << std::endl;
+				std::cerr << "Err:" << errorId << std::endl;
+				exit(EXIT_FAILURE);
+			}
 
 		}
-
-
 
 		tensor operator-(const tensor& Tensor1)
 		{
