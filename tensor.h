@@ -404,12 +404,12 @@ class tensor
 
 		}
                                               
-		tensor operator*(const tensor& Tensor1)
+		tensor operator*(const tensor& other) const
 		{
 			try
 			{
-				tensor<ElType> res(row_, Tensor1.col_);
-				if(col_ == Tensor1.row_)
+				tensor<ElType> res(row_, other.col_);
+				if(col_ == other.row_)
 				{
 				
 					for(uint iter = 0; iter< res.size_; iter++)
@@ -426,7 +426,7 @@ class tensor
 						for(uint inner = 0; inner< col_; inner++)
 						{
 							ElType first 	= startPtr_[row_index * col_ + inner];
-							ElType second 	= Tensor1.startPtr_[col_index + Tensor1.col_ * inner]; 
+							ElType second 	= other.startPtr_[col_index + other.col_ * inner]; 
 							
 							target	+= first * second;
 							
@@ -446,40 +446,58 @@ class tensor
 			}
 		}                             
                                               
-		tensor operator/(const ElType scalar)
+		tensor operator/(const ElType scalar) const
 		{
- 			tensor<ElType> res(row_, col_);
-			for(uint iter = 0; iter < size_; iter++)
+			try
 			{
-				
-				ElType old = *mixedPtr_[iter];
-				ElType newVal = old / scalar;
-				res.startPtr_[iter] = newVal;
+				if(scalar != 0)
+				{
+					tensor<ElType> res(row_, col_);
+					for(uint iter = 0; iter < size_; iter++)
+					{
+						ElType old = *mixedPtr_[iter];
+						ElType newVal = old / scalar;
+						res.startPtr_[iter] = newVal;
+					}
+					return res;
+				}
+				else throw 406;
 			}
-			std::cout << "operator / icindeyim" << std::endl;
-			res.print();
-			return res;
-			
+			catch(int errorId)
+			{
+				std::cerr << "Division by Zero" << std::endl;
+				std::cerr << "Err:" << errorId << std::endl;
+				exit(EXIT_FAILURE);
+			}
 		}
-		// This is strictly used for skew matrices.
-		tensor operator%(const tensor& Tensor1)
+		// Cross Product of two vectors.
+		tensor operator%(const tensor& other)
 		{
- 			tensor<ElType> skew(3, 3);
-			ElType p = *mixedPtr_[0];
-			ElType q = *mixedPtr_[1];
-			ElType r = *mixedPtr_[2];
+			try
+			{
+				if(row_ == 3 && col_ == 1 && other.row_ == 3 && other.col_ == 1)
+				{
+					tensor<ElType> skew(3, 3);
+					ElType p = startPtr_[0];
+					ElType q = startPtr_[1];
+					ElType r = startPtr_[2];
 
-			skew ={	0,	-r, 	q, 
-				r,	0,	-p,
-				-q,	p,	0};
-			std::cout << "skew:" << std::endl;
-			skew.print() ;
- 			tensor<ElType> res(3, 1);
-			res = skew * Tensor1;
-			std::cout << "operator % icindeyim" << std::endl;
-			res.print();
-			return res;
-			
+					skew ={	0,	-r, 	q, 
+						r,	0,	-p,
+						-q,	p,	0};
+					tensor<ElType> res(3, 1);
+					res = skew * other;
+					return res;
+					
+				}
+				else throw 407;
+			}
+			catch(int errorId)
+			{
+				std::cerr << "Division by Zero" << std::endl;
+				std::cerr << "Err:" << errorId << std::endl;
+				exit(EXIT_FAILURE);
+			}
 		}
 
 
