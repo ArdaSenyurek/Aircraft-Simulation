@@ -199,7 +199,7 @@ class tensor
 			try
 			{
 				tensor<ElType> res = tensor(1, col_);
-				if (i <= row_)
+				if (i <= row_ && i > 0)
 				{
 					ElType* firstPtr = startPtr_ + ((i - 1) * col_);
 					for(uint iter = 0; iter < col_; iter++)
