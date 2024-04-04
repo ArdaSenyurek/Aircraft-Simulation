@@ -60,6 +60,28 @@ class tensor
                         other.endPtr_   = nullptr;
 			
 		}
+		// Copy Constructor with Val
+		tensor(const tensor<ElType>& other, ElType val)
+			:
+				row_(other.row_),
+				col_(other.col_),
+				size_(col_ * row_)
+			{
+			
+				
+			
+				ElType* els = (ElType*)malloc(size_ * sizeof(ElType));
+				if (els == NULL) throw "tensor malloc error";
+				else
+				{
+					startPtr_ = els;
+					for(uint iter = 0; iter < size_; iter++)
+					{
+						startPtr_[iter] = val;
+					}
+					endPtr_ = startPtr_ + size_;
+				}	
+			}
 		// Copy Constructor
 		tensor(const tensor<ElType>& other)
 			:
