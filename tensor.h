@@ -215,6 +215,10 @@ class tensor
 		{
 			startPtr_[i * col_ + j] = val;
 		}
+		uint size() const
+		{
+			return size_;
+		}
 //OPERATOR OVERLOADS------------------------------------------
 		tensor operator[](uint i) const
 		{
@@ -351,6 +355,16 @@ class tensor
 
 		}
                                               
+                                              
+		tensor operator*(ElType scalar) const
+		{
+			tensor<ElType> res(*this);
+			for(uint iter= 0; iter< size_; iter++)
+			{
+				res.startPtr_[iter] *= scalar;
+			}
+			return res;
+		}
 		tensor operator*(const tensor& other) const
 		{
 			try
@@ -392,7 +406,6 @@ class tensor
 				exit(EXIT_FAILURE);
 			}
 		}                             
-                                              
 		tensor operator/(const ElType scalar) const
 		{
 			try
